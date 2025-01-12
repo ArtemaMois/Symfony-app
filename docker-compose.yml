@@ -39,5 +39,19 @@ services:
     networks:
       - app_network
 
+  # db-test:
+  #   container_name: app_db_test
+  #   image: postgres:16-alpine
+  #   environment:
+  #     - POSTGRES_PASSWORD=test
+  #     - POSTGRES_USER=localhost
+  #     - POSTGRES_DB=symfony-test
+  #   volumes:
+  #     - ./database-test:/var/lib/postgres
+  #   ports:
+  #    - "5435:5432"
+  #   networks:
+  #     - app_network
+
 networks:
   app_network: 
