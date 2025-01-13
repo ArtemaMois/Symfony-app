@@ -6,7 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted("ROLE_USER")]
 class HomeController extends AbstractController
 {
     #[Route('', name: 'app_home')]
@@ -24,7 +27,6 @@ class HomeController extends AbstractController
     {
         $user = $security->getUser();
         if (!is_null($user)) {
-            dd($user);
             return $this->render('home/index.html.twig', [
                 'user' => $user,
             ]);

@@ -15,29 +15,28 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class LoginCustomAuthenticator extends AbstractAuthenticator
+class LoginCustomAuthenticator extends AbstractLoginFormAuthenticator
 {
 
+    use TargetPathTrait;
     public function __construct(
         private UserRepository $repository,
         private RouterInterface $router
     ) {}
 
-    public function supports(Request $request): ?bool
-    {
-        return $request->attributes->get('_route') == 'app_login' && $request->isMethod('post');
-    }
-
     public function authenticate(Request $request): Passport
     {
         $credentials = $this->getCredentials($request);
         return new Passport(
-            new UserBadge($credentials['email'], function($userIdentifier) {
+            new UserBadge($credentials['email'], function ($userIdentifier) {
                 $user = $this->repository->findOneBy(['email' => $userIdentifier]);
                 if (!$user) {
                     throw new UserNotFoundException();
@@ -50,29 +49,21 @@ class LoginCustomAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        if ($target = $this->getTargetPath($request->getSession(), $firewallName)) {
+            return new RedirectResponse($target);
+        }
         return new RedirectResponse(
             $this->router->generate('app_home'),
         );
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+
+    public function start(Request $request, AuthenticationException $authException = null): Response
     {
-        $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
         return new RedirectResponse(
             $this->router->generate('app_login')
         );
     }
-
-    // public function start(Request $request, AuthenticationException $authException = null): Response
-    // {
-    /*
-            * If you would like this class to control what happens when an anonymous user accesses a
-            * protected page (e.g. redirect to /login), uncomment this method and make this class
-            * implement Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface.
-            *
-            * For more details, see https://symfony.com/doc/current/security/experimental_authenticators.html#configuring-the-authentication-entry-point
-        */
-    // }
 
     public function getCredentials(Request $request): array
     {
@@ -82,4 +73,8 @@ class LoginCustomAuthenticator extends AbstractAuthenticator
         ];
     }
 
+    protected function getLoginUrl(Request $request): string
+    {
+        return $this->router->generate('app_login');
+    }
 }
