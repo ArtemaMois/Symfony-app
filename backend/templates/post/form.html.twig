@@ -1,0 +1,7 @@
+{{ form_errors(postForm) }}
+{{ form_start(postForm) }}
+{{ form_row(postForm.title) }}
+{{ form_row(postForm.body) }}
+{{ form_row(postForm.image) }}
+<button type="submit" class="btn btn-success mt-4">Create</button>
+{{ form_end(postForm) }}

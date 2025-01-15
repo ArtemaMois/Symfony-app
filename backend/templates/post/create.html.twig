@@ -1,28 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Login
+{% block title %}New Post
 {% endblock %}
 
+
 {% block body %}
-	<form method="post" action="{{ url('post_store') }}">
-
-		<h1 class="h2 mb-5 font-weight-normal mt-4">New Post</h1>
-		<label for="title" class="mb-3 h4">Title</label>
-		<input type="text" name="_title" id="title" class="form-control mb-3" placeholder="Some Title" required autofocus>
-		<label for="body" class="form-label h4">Body</label>
-		<textarea name="_body" id="body" class="form-control mb-4"></textarea>
-		<div class="mb-3">
-			<label for="formFile" class="form-label h4 mb-3">Choose some image for post</label>
-			<input class="form-control mb-5" type="file" id="formFile" name="_image">
+	<div class="header mt-4 mb-4 d-flex justify-content-between mt-5 mb-4">
+		<h1 class="h1">New Post</h1>
+		<div>
+			<a href="{{ path('posts_self') }}" class="btn btn-success">My Posts</a>
 		</div>
-
-		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-		<div class="d-flex justify-content-between">
-			<button class="btn btn-lg btn-success" type="submit">
-				Create
-			</button>
-
-		</div>
-	</form>
+	</div>
+	{% include 'post/form.html.twig' %}
 {% endblock %}

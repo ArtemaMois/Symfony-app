@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Update Post
+{% endblock %}
+
+{% block body %}
+
+	<h1 class="mt-4 mb-4">Update Post</h1>
+
+	{{ form_start(postForm) }}
+	{{ form_errors(postForm) }}
+	{{ form_row(postForm.title) }}
+	{{ form_row(postForm.body) }}
+	{{ form_row(postForm.image) }}
+	{{ form_errors(postForm) }}
+	<div>
+		{% if post.image is empty  %}
+			Current Image:
+			<span class="text-secondary">
+				choose image</span>
+		{% else %}
+			<p>Current Image:
+			</p>
+			<img src="{{ asset('uploads/posts/' ~ post.image)|imagine_filter('post_thumbnail') }}" alt="">
+		{% endif %}
+	</div>
+	<button type="submit" class="btn btn-success mt-4 mb-4">Create</button>
+	{{ form_end(postForm) }}
+	<form action="{{ path('post_delete', {'slug': post.slug}) }}" method="POST">
+		<div>
+			<button type="submit" class="btn btn-danger">Delete</button>
+		</div>
+	</form>
+{% endblock %}

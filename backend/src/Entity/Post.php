@@ -6,6 +6,8 @@ use App\Repository\PostRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Slug;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -15,10 +17,11 @@ class Post
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 100)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 100, unique: true)]
+    #[Slug(fields: ['title'])]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -30,9 +33,8 @@ class Post
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
     private ?User $user = null;
 
-
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?DateTimeInterface $created_at = null;
+    private ?\DateTimeInterface $created_at = null;
 
     public function getId(): ?int
     {
@@ -87,15 +89,28 @@ class Post
         return $this;
     }
 
-    public function getCreated_at(): DateTimeInterface|null
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
     }
 
-    public function setCreated_at($created_at): static
+    public function setCreatedAt(DateTimeInterface $created_at): static
     {
         $this->created_at = $created_at;
 
         return $this;
     }
+
+    public function getUser(): User|null
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 }
