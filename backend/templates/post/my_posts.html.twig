@@ -33,7 +33,7 @@
 				<div class="card" style="width: 18rem;">
 					<img src="{{ asset('uploads/posts/' ~ post.image) }}" alt="" class="card-img-top" width="286" height="190">
 					<div class="card-body ">
-						<h5 class="card-title">{{ post.title }}</h5>
+						<h5 class="card-title text-truncate">{{ post.title }}</h5>
 						<p class="card-text text-truncate">{{ post.body }}</p>
 						<div class="d-flex justify-content-between">
 							<a href="{{ path('post_show', {'slug': post.slug}) }}" class="btn btn-primary">Go to post</a>

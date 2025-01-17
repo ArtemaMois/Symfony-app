@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Post;
 use Doctrine\DBAL\Types\StringType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -36,6 +38,7 @@ class PostFormType extends AbstractType
             ])
             ->add('body', TextareaType::class, [
                 'required' => true,
+                'attr' => ['rows' => 8],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'The post body is required'
@@ -62,6 +65,12 @@ class PostFormType extends AbstractType
                     mimeTypesMessage: 'File type must be an image format png, jpg, jpeg, webp',
                     )  
                 ]
+            ])
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'required' => true,
+                'choice_label' => 'title',
+                'placeholder' => 'Choose category'
             ])
         ;
     }

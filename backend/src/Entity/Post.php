@@ -6,6 +6,7 @@ use App\Repository\PostRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Gedmo\Mapping\Annotation\Slug;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -32,6 +33,10 @@ class Post
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'posts')]
     private ?User $user = null;
+
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'posts')]
+    #[JoinColumn(name: 'category_id', referencedColumnName: 'id')]
+    private ?Category $category = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeInterface $created_at = null;
@@ -113,4 +118,15 @@ class Post
         return $this;
     }
 
+    public function getCategory(): Category|null
+    {
+        return $this->category;
+    }
+
+    public function setCategory(Category $category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
 }

@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Post;
 use App\Form\PostFormType;
 use App\Repository\PostRepository;
 use App\Service\PostService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -20,6 +22,7 @@ class PostController extends AbstractController
         private PostRepository $repository,
         private EntityManagerInterface $entityManager,
         private PostService $service,
+        private Security $security
     ) {}
 
     #[Route(path: '/posts/new', name: 'post_store', methods: ['POST', 'GET'])]
@@ -43,9 +46,9 @@ class PostController extends AbstractController
     }
 
     #[Route(path: '/posts', name: 'posts')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $posts = $this->repository->findAll();
+        $posts = $this->service->getPosts($request->get('title'));
 
         return $this->render('post/posts.html.twig', [
             'posts' => $posts,
@@ -56,7 +59,7 @@ class PostController extends AbstractController
     public function myPosts()
     {
         return $this->render('post/my_posts.html.twig', [
-            'posts' => $this->repository->findAll()
+            'posts' => $this->security->getUser()->getPosts()
         ]);
     }
 
@@ -71,6 +74,10 @@ class PostController extends AbstractController
     #[Route('posts/{slug}/update', 'post_update', methods: ['GET', 'PATCH', 'POST'])]
     public function update(Post $post, Request $request)
     {
+        if($post->getUser()->getUserIdentifier() !== $this->security->getUser()->getUserIdentifier())
+        {
+            return  is_null($request->headers->get('referer')) ? $this->redirectToRoute('posts') : $this->redirect($request->headers->get('referer'));
+        }
         $form = $this->createForm(PostFormType::class, $post);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -93,5 +100,14 @@ class PostController extends AbstractController
         $this->entityManager->flush();
         $this->addFlash('success', '');
         return $this->redirectToRoute('posts_self');
+    }
+
+    #[Route(path: '/posts?category={slug}', name:'posts_by_category')]
+    public function postsByCategory(Category $category, Request $request)
+    {
+        return $this->render('post/posts.html.twig', [
+            'posts' => $category->getPosts(),
+            'category' => $category
+        ]);
     }
 }

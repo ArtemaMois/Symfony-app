@@ -11,6 +11,7 @@
 	{{ form_errors(postForm) }}
 	{{ form_row(postForm.title) }}
 	{{ form_row(postForm.body) }}
+	{{ form_row(postForm.category) }}
 	{{ form_row(postForm.image) }}
 	{{ form_errors(postForm) }}
 	<div>
@@ -24,7 +25,7 @@
 			<img src="{{ asset('uploads/posts/' ~ post.image)|imagine_filter('post_thumbnail') }}" alt="">
 		{% endif %}
 	</div>
-	<button type="submit" class="btn btn-success mt-4 mb-4">Create</button>
+	<button type="submit" class="btn btn-success mt-4 mb-4">Update</button>
 	{{ form_end(postForm) }}
 	<form action="{{ path('post_delete', {'slug': post.slug}) }}" method="POST">
 		<div>

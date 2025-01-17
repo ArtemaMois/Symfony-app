@@ -3,14 +3,18 @@
 namespace App\Service;
 
 use App\Entity\Category;
+use App\Repository\CategoryRepository;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategoryService
 {
 
     public function __construct(
-        private SluggerInterface $slugger
+        private SluggerInterface $slugger,
+        private EntityManagerInterface $entityManager,
     ) {}
 
     public function setDefaultFields(Category $category)
@@ -27,6 +31,19 @@ class CategoryService
 
     private function setCreatedAt(Category $category)
     {
-        $category->setCreated_at(new DateTimeImmutable());
+        $category->setCreatedAt(new DateTimeImmutable());
     }
+
+    public function getCategoryByTitle(?string $title)
+    {
+        if(is_null($title))
+        {
+            return $this->entityManager->getRepository(Category::class)->findAll();
+        }
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        return $queryBuilder->select('c')->from(Category::class, 'c')
+        ->where('LOWER(c.title) LIKE :title')->setParameter('title', '%' . strtolower($title) . '%')
+        ->getQuery()->getResult();
+    }
+
 }

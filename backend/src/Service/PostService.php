@@ -2,12 +2,15 @@
 
 namespace App\Service;
 
+use App\Converter\CyrilicConverter;
 use App\Entity\Post;
 use App\FileManager\FileManager;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class PostService
@@ -16,6 +19,7 @@ class PostService
     public function __construct(
         private Security $security,
         private SluggerInterface $slugger,
+        private EntityManagerInterface $entityManager,
         private FileManager $fileManager,
     ) {}
     public function setDefaultFields(Post $post)
@@ -27,7 +31,8 @@ class PostService
 
     private function setSlug(string $title)
     {
-        return $this->slugger->slug($title);
+        $convertedTitle = CyrilicConverter::replaceCyrilic($title); 
+        return $this->slugger->slug($convertedTitle);
     }
 
     private function setCreatedAt(): DateTimeImmutable
@@ -62,6 +67,18 @@ class PostService
     public function removeFile(string $filename)
     {
         $this->fileManager->remove($filename);
+    }
+
+    public function getPosts(?string $title)
+    {
+        if(is_null($title))
+        {
+            return $this->entityManager->getRepository(Post::class)->findAll();
+        }
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        return $queryBuilder->select('p')->from(Post::class, 'p')
+        ->where('LOWER(p.title) LIKE :title')->setParameter('title', '%' . strtolower($title) . '%')
+        ->getQuery()->getResult();
     }
 
 

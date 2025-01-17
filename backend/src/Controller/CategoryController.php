@@ -22,10 +22,11 @@ class CategoryController extends AbstractController
     ) {}
 
     #[Route(path: '/categories', name: 'categories')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $categories = $this->service->getCategoryByTitle($request->get('title'));
         return $this->render('category/categories.html.twig', [
-            'categories' => $this->repository->findAll()
+            'categories' => $categories
         ]);
     }
 

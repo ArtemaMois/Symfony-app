@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\CategoryRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
@@ -22,6 +24,9 @@ class Category
     #[ORM\Column(length: 150)]
     #[Slug(fields: ['title'])]
     private ?string $slug = null;
+
+    #[ORM\OneToMany(targetEntity: Post::class,  mappedBy: 'category')]
+    private ?Collection $posts = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?DateTimeInterface $created_at = null;
@@ -64,6 +69,18 @@ class Category
     public function setCreatedAt(DateTimeInterface $created_at): static
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getPosts(): array|Collection|null
+    {
+        return $this->posts;
+    }
+
+    public function setPosts(ArrayCollection $posts)
+    {
+        $this->posts = $posts;
 
         return $this;
     }

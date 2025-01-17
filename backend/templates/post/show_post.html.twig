@@ -19,8 +19,8 @@
 
 	<div class="container">
         <h1 class="h1 mt-4 mb-4">{{ post.title }}</h1>
-		<img src="{{ asset('uploads/posts/' ~ post.image) }}" alt="" class="" width=800 heght=500>
-        <p>{{ post.body }}</p>
-        {{ post.createdAt|date('i:H d.M.Y') }}
+		<img src="{{ asset('uploads/posts/' ~ post.image) }}" alt="" class="mb-4" width=800 heght=500>
+        <p style="font-size: 24px;">{{ post.body }}</p>
+        <p class="text-secondary">{{ post.createdAt|date('i:H d.M.Y') }}</p>
     </div>
 {% endblock %}
