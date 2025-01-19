@@ -16,3 +16,22 @@ liip_imagine:
                     size:          [290, 160]
                     mode:          outbound
                     allow_upscale: true
+        avatar_minified:
+            quality: 100
+            cache: ~
+            filters:
+                thumbnail:
+                    size:          [70, 70]
+                    mode:          outbound
+                    allow_downscale: true
+
+        avatar_full:
+            quality: 100
+            cache: ~
+            filters:
+                thumbnail:
+                    size:          [150, 150]
+                    mode:          outbound
+                    allow_downscale: true
+                    allow_upscale: true
+

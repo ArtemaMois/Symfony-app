@@ -18,6 +18,7 @@
 			</ul>
 			{% if app.user %}
 				<div class="d-flex gap-5" style="align-items:center;">
+					<a href="{{ path('profile') }}" class="btn btn-success">Profile</a>
 					<span class="text-light" style="height:fit-content;">
 						{{ app.user.userIdentifier }}
 					</span>

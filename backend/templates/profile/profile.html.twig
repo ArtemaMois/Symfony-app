@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ user.name }}
+{% endblock %}
+
+{% block body %}
+	{% for message in app.flashes('success') %}
+		{% if message is not empty %}
+			<div class="alert alert-success" role="alert">
+				{{ message }}
+			</div>
+		{% endif %}
+	{% endfor %}
+	<h1 class="h3 mb-5 font-weight-normal mt-5">Profile</h1>
+	<div class="container">
+		{{ form_errors(profileForm) }}
+		{{ form_start(profileForm) }}
+		{{ form_row(profileForm.name) }}
+		{{ form_row(profileForm.email) }}
+		{{ form_row(profileForm.description) }}
+		{{ form_row(profileForm.image) }}
+
+		{% if user.image is null %}
+			<div class="mb-5 mt-3">Current avatar:
+				<span class="text-secondary">Фото не выбрано</span>
+			</div>
+		{% else %}
+			<div class="mb-5 mt-3"><span class="me-5">Current avatar: </span>
+				<img src="{{ asset('uploads/avatars/' ~ user.image)|imagine_filter('post_thumbnail') }}" alt="Avatar">
+
+			</div>
+		{% endif %}
+		<button type="submit" class="btn btn-success">Save</button>
+		{{ form_end(profileForm) }}
+	</div>
+{% endblock %}

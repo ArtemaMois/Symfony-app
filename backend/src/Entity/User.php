@@ -48,8 +48,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'user')]
     private ?Collection $posts = null;
 
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $image = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
+    
     #[ORM\Column]
     private bool $isVerified = false;
+
+    #[ORM\OneToMany(targetEntity: Like::class,  mappedBy: 'user')]
+    private ?Collection $likes = null;
+
+    #[ORM\OneToMany(targetEntity: Dislike::class,  mappedBy: 'user')]
+    private ?Collection $dislikes = null;
+    
 
     public function getId(): ?int
     {
@@ -68,21 +81,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     *
-     * @return list<string>
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -92,9 +95,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
@@ -102,9 +102,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -117,9 +114,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
@@ -167,14 +161,62 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->posts;
     }
 
-    public function getSlug()
+    public function getSlug(): string|null
     {
         return $this->slug;
     }
 
-    public function setSlug($slug)
+    public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getImage(): string|null
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getDescription(): string|null
+    {
+        return $this->description;
+    }
+ 
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getLikes(): array|Collection|null
+    {
+        return $this->likes;
+    }
+
+    public function setLikes($likes): static
+    {
+        $this->likes = $likes;
+
+        return $this;
+    }
+
+    public function getDislikes(): array|Collection|null
+    {
+        return $this->dislikes;
+    }
+
+    public function setDislikes($dislikes): static
+    {
+        $this->dislikes = $dislikes;
 
         return $this;
     }

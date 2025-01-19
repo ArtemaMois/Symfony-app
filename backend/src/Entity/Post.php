@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PostRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -37,6 +38,13 @@ class Post
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'posts')]
     #[JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private ?Category $category = null;
+
+    #[ORM\OneToMany(targetEntity: Like::class,  mappedBy: 'post')]
+    private ?Collection $likes = null;
+
+    #[ORM\OneToMany(targetEntity: Dislike::class,  mappedBy: 'post')]
+    private ?Collection $dislikes = null;
+    
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeInterface $created_at = null;
@@ -126,6 +134,30 @@ class Post
     public function setCategory(Category $category)
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getLikes()
+    {
+        return $this->likes;
+    }
+
+    public function setLikes($likes)
+    {
+        $this->likes = $likes;
+
+        return $this;
+    }
+
+    public function getDislikes()
+    {
+        return $this->dislikes;
+    }
+
+    public function setDislikes($dislikes)
+    {
+        $this->dislikes = $dislikes;
 
         return $this;
     }

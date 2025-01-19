@@ -30,7 +30,7 @@
 		.search:hover {
 			border: 1px solid gray;
 		}
-		}
+	}
 	</style>
 	<div class="header d-flex justify-content-between mt-5 mb-4">
 		<h1 class="h3 font-weight-normal">Posts
@@ -40,7 +40,7 @@
 		</h1>
 		<a href="{{ path('post_store') }}" class="btn btn-success">Create New</a>
 	</div>
-	<form class="d-flex justify-content-between gap-2 search-field mb-5" method="get" >
+	<form class="d-flex justify-content-between gap-2 search-field mb-5" method="get">
 		<input type="search" name="title" class="search" placeholder="Search categories">
 		<button type="submit" class="btn btn-dark">Search</button>
 	</form>
@@ -52,21 +52,23 @@
 		{% endif %}
 	{% endfor %}
 	<div class="d-flex gap-5 ">
-		{% if posts is defined and posts is not empty %}
-			{% for post in posts %}
-				<div class="card" style="width: 18rem;">
-					<img src="{{ asset('uploads/posts/' ~ post.image) }}" alt="" class="card-img-top" width="286" height="190">
-					<div class="card-body ">
-						<h5 class="card-title text-truncate">{{ post.title }}</h5>
-						<p class="card-text text-truncate">{{ post.body }}</p>
-						<div class="d-flex justify-content-between">
-							<a href="{{ path('post_show', {'slug': post.slug}) }}" class="btn btn-primary">Go to post</a>
+		<div class="row gap-4">
+			{% if posts is defined and posts is not empty %}
+				{% for post in posts %}
+					<div class="card col-lg-3" style="width: 18rem;">
+						<img src="{{ asset('uploads/posts/' ~ post.image) }}" alt="" class="card-img-top" width="286" height="190">
+						<div class="card-body ">
+							<h5 class="card-title text-truncate">{{ post.title }}</h5>
+							<p class="card-text text-truncate">{{ post.body }}</p>
+							<div class="d-flex justify-content-between">
+								<a href="{{ path('post_show', {'slug': post.slug}) }}" class="btn btn-primary">Go to post</a>
+							</div>
 						</div>
 					</div>
-				</div>
-			{% endfor %}
+				{% endfor %}
 			{% else %}
 				<div class="text-secondary mt-5" style="width: 80%; text-align:center;font-size:28px;">Пусто</div>
-		{% endif %}
-	</div>
+			{% endif %}
+		</div>
+	</div>		
 {% endblock %}

@@ -68,6 +68,7 @@ class PostController extends AbstractController
     {
         return $this->render('post/show_post.html.twig', [
             'post' => $post,
+            'user' => $post->getUser()
         ]);
     }
 

@@ -31,7 +31,7 @@ class PostService
 
     private function setSlug(string $title)
     {
-        $convertedTitle = CyrilicConverter::replaceCyrilic($title); 
+        $convertedTitle = CyrilicConverter::replaceCyrilic($title);
         return $this->slugger->slug($convertedTitle);
     }
 
@@ -71,15 +71,12 @@ class PostService
 
     public function getPosts(?string $title)
     {
-        if(is_null($title))
-        {
+        if (is_null($title)) {
             return $this->entityManager->getRepository(Post::class)->findAll();
         }
         $queryBuilder = $this->entityManager->createQueryBuilder();
         return $queryBuilder->select('p')->from(Post::class, 'p')
-        ->where('LOWER(p.title) LIKE :title')->setParameter('title', '%' . strtolower($title) . '%')
-        ->getQuery()->getResult();
+            ->where('LOWER(p.title) LIKE :title')->setParameter('title', '%' . strtolower($title) . '%')
+            ->getQuery()->getResult();
     }
-
-
 }
