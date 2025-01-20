@@ -71,12 +71,12 @@ class Comment
         return $this;
     }
 
-    public function getCreated_at(): DateTimeInterface|null
+    public function getCreatedAt(): DateTimeInterface|null
     {
         return $this->created_at;
     }
 
-    public function setCreated_at(\DateTimeImmutable $created_at): static
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
 

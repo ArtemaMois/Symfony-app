@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Form\CommentFormType;
 use App\Form\PostFormType;
 use App\Repository\PostRepository;
 use App\Service\PostService;
@@ -14,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PostController extends AbstractController
@@ -22,7 +26,7 @@ class PostController extends AbstractController
         private PostRepository $repository,
         private EntityManagerInterface $entityManager,
         private PostService $service,
-        private Security $security
+        private Security $security,
     ) {}
 
     #[Route(path: '/posts/new', name: 'post_store', methods: ['POST', 'GET'])]
@@ -64,13 +68,21 @@ class PostController extends AbstractController
     }
 
     #[Route('/posts/{slug}', 'post_show')]
-    public function show(Post $post)
+    public function show(Post $post, Request $request, RouterInterface $router)
     {
+        $comment = new Comment();
+        $commentForm = $this->createForm(CommentFormType::class, $comment, [
+            'action' => $router->generate('post_comments', [
+                'slug' => $post->getSlug()
+            ])
+        ]); 
         return $this->render('post/show_post.html.twig', [
             'post' => $post,
             'user' => $post->getUser(),
             'likes' => $post->getLikes(),
-            'dislikes' => $post->getDislikes()
+            'dislikes' => $post->getDislikes(),
+            'comments' => $post->getComments(),
+            'commentForm' => $commentForm
         ]);
     }
 

@@ -46,6 +46,8 @@ class Post
     #[ORM\OneToMany(targetEntity: Dislike::class,  mappedBy: 'post')]
     private ?Collection $dislikes = null;
     
+    #[ORM\OneToMany(Comment::class, mappedBy: 'post')]
+    private ?Collection $comments = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeInterface $created_at = null;
@@ -166,6 +168,18 @@ class Post
     public function setDislikes($dislikes)
     {
         $this->dislikes = $dislikes;
+
+        return $this;
+    }
+
+    public function getComments(): Collection|null
+    {
+        return $this->comments;
+    }
+
+    public function setComments($comments): static
+    {
+        $this->comments = $comments;
 
         return $this;
     }
