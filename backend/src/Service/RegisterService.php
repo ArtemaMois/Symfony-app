@@ -28,7 +28,7 @@ class RegisterService
 
     private function setCreatedAtToUser(User $user)
     {
-        $user->setCreated_at(new \DateTimeImmutable());
+        $user->setCreatedAt(new \DateTimeImmutable());
     }
 
     public function setUserSlug(User $user)
