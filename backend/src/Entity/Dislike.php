@@ -19,7 +19,7 @@ class Dislike
     private ?User $user = null;
 
     #[ORM\ManyToOne(Post::class, inversedBy: 'likes')]
-    #[JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[JoinColumn(name: 'post_id', referencedColumnName: 'id')]
     private ?Post $post = null;
     
     public function getId(): ?int

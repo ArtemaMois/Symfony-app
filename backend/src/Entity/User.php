@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation\Slug;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -48,10 +49,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'user')]
     private ?Collection $posts = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
     
     #[ORM\Column]
@@ -62,8 +63,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: Dislike::class,  mappedBy: 'user')]
     private ?Collection $dislikes = null;
+
+    #[ORM\OneToMany(Comment::class, mappedBy:'user')]
+    private ?Collection $comments = null;
     
 
+    #[Groups('main')]
     public function getId(): ?int
     {
         return $this->id;
@@ -81,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[Groups('main')]
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
@@ -114,12 +120,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
 
+    #[Groups('main')]
     public function getName(): ?string
     {
         return $this->name;
@@ -132,12 +140,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreated_at(): ?\DateTimeInterface
+    #[Groups('main')]
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
     }
 
-    public function setCreated_at($created_at): static
+    public function setCreatedAt($created_at): static
     {
         $this->created_at = $created_at;
 

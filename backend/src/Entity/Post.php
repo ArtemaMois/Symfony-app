@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Gedmo\Mapping\Annotation\Slug;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -49,11 +50,13 @@ class Post
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
+    #[Groups('main')]
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    #[Groups('main')]
     public function getTitle(): ?string
     {
         return $this->title;
@@ -66,6 +69,7 @@ class Post
         return $this;
     }
 
+    #[Groups('main')]
     public function getSlug(): ?string
     {
         return $this->slug;
@@ -78,6 +82,7 @@ class Post
         return $this;
     }
 
+    #[Groups('main')]
     public function getBody(): ?string
     {
         return $this->body;
@@ -90,6 +95,7 @@ class Post
         return $this;
     }
 
+    #[Groups('main')]
     public function getImage(): ?string
     {
         return $this->image;
@@ -102,6 +108,8 @@ class Post
         return $this;
     }
 
+
+    #[Groups('main')]
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;

@@ -5,8 +5,15 @@
 {% endblock %}
 {% block body %}
 	<style>
-		.dislike {
+		.dislike-image {
 			transform: rotate(180deg);
+		}
+		.like,
+		.dislike {
+			cursor: pointer;
+		}
+		.active {
+			fill: #4169E1;
 		}
 	</style>
 
@@ -21,50 +28,50 @@
 		<h1 class="h1 mt-5 mb-4">{{ post.title }}</h1>
 		<img src="{{ asset('uploads/posts/' ~ post.image) }}" alt="" class="mb-4" width="800" heght="500">
 		<p style="font-size: 24px;">{{ post.body }}</p>
-		<div class="d-flex gap-4">
-			<div class="mt-3 mb-3 like">
+		<div class="d-flex gap-5">
+			<div class="mt-3 mb-3 like d-flex gap-3">
 				<svg fill="#000000" height="30" width="30" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0 0 512 512" xml:space="preserve">
 					<g>
 						<g>
 							<path d="M83.478,139.13H16.696C7.479,139.13,0,146.603,0,155.826v333.913c0,9.223,7.479,16.696,16.696,16.696h66.783
-																																			c9.217,0,16.696-7.473,16.696-16.696V155.826C100.174,146.603,92.695,139.13,83.478,139.13z M50.089,439.652
-																																			c-9.212,0-16.696-7.484-16.696-16.696s7.484-16.696,16.696-16.696s16.696,7.484,16.696,16.696S59.302,439.652,50.089,439.652z"/>
+																																																																																				c9.217,0,16.696-7.473,16.696-16.696V155.826C100.174,146.603,92.695,139.13,83.478,139.13z M50.089,439.652
+																																																																																				c-9.212,0-16.696-7.484-16.696-16.696s7.484-16.696,16.696-16.696s16.696,7.484,16.696,16.696S59.302,439.652,50.089,439.652z"/>
 						</g>
 					</g>
 					<g>
 						<g>
 							<path d="M512,222.609c0-27.619-22.468-50.087-50.087-50.087H334.054c21.989-51.386,18.391-114.603,18.228-116.87
-																																			c0-27.619-22.468-50.087-50.087-50.087s-50.087,22.468-50.087,50.087c0,44.07-26.75,84.749-66.554,101.222l-41.673,17.233
-																																			c-6.24,2.581-10.316,8.674-10.316,15.429v266.81c0,9.223,7.479,16.696,16.696,16.696h211.478
-																																			c27.619,0,50.087-22.468,50.087-50.087c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332
-																																			c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332c0-6.511-1.25-12.739-3.522-18.45
-																																			C496.337,265.142,512,245.669,512,222.609z"/>
+																																																																																				c0-27.619-22.468-50.087-50.087-50.087s-50.087,22.468-50.087,50.087c0,44.07-26.75,84.749-66.554,101.222l-41.673,17.233
+																																																																																				c-6.24,2.581-10.316,8.674-10.316,15.429v266.81c0,9.223,7.479,16.696,16.696,16.696h211.478
+																																																																																				c27.619,0,50.087-22.468,50.087-50.087c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332
+																																																																																				c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332c0-6.511-1.25-12.739-3.522-18.45
+																																																																																				C496.337,265.142,512,245.669,512,222.609z"/>
 						</g>
 					</g>
 				</svg>
-				<div class="count">{{ like|length }}</div>
+				<div class="like__count" style="font-size: 20px;">{{ likes|length }}</div>
 			</div>
-			<div class="mt-3 mb-3 dislike">
-				<svg fill="#000000" height="30" width="30" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0 0 512 512" xml:space="preserve">
+			<div class="mt-3 mb-3 dislike d-flex gap-3 flex-row-reverse">
+				<svg  class="dislike-image" fill="#000000" height="30" width="30" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewbox="0 0 512 512" xml:space="preserve">
 					<g>
 						<g>
 							<path d="M83.478,139.13H16.696C7.479,139.13,0,146.603,0,155.826v333.913c0,9.223,7.479,16.696,16.696,16.696h66.783
-																																			c9.217,0,16.696-7.473,16.696-16.696V155.826C100.174,146.603,92.695,139.13,83.478,139.13z M50.089,439.652
-																																			c-9.212,0-16.696-7.484-16.696-16.696s7.484-16.696,16.696-16.696s16.696,7.484,16.696,16.696S59.302,439.652,50.089,439.652z"/>
+																																																																																				c9.217,0,16.696-7.473,16.696-16.696V155.826C100.174,146.603,92.695,139.13,83.478,139.13z M50.089,439.652
+																																																																																				c-9.212,0-16.696-7.484-16.696-16.696s7.484-16.696,16.696-16.696s16.696,7.484,16.696,16.696S59.302,439.652,50.089,439.652z"/>
 						</g>
 					</g>
 					<g>
 						<g>
 							<path d="M512,222.609c0-27.619-22.468-50.087-50.087-50.087H334.054c21.989-51.386,18.391-114.603,18.228-116.87
-																																			c0-27.619-22.468-50.087-50.087-50.087s-50.087,22.468-50.087,50.087c0,44.07-26.75,84.749-66.554,101.222l-41.673,17.233
-																																			c-6.24,2.581-10.316,8.674-10.316,15.429v266.81c0,9.223,7.479,16.696,16.696,16.696h211.478
-																																			c27.619,0,50.087-22.468,50.087-50.087c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332
-																																			c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332c0-6.511-1.25-12.739-3.522-18.45
-																																			C496.337,265.142,512,245.669,512,222.609z"/>
+																																																																																				c0-27.619-22.468-50.087-50.087-50.087s-50.087,22.468-50.087,50.087c0,44.07-26.75,84.749-66.554,101.222l-41.673,17.233
+																																																																																				c-6.24,2.581-10.316,8.674-10.316,15.429v266.81c0,9.223,7.479,16.696,16.696,16.696h211.478
+																																																																																				c27.619,0,50.087-22.468,50.087-50.087c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332
+																																																																																				c0-6.511-1.25-12.739-3.522-18.451c21.25-5.799,36.913-25.272,36.913-48.332c0-6.511-1.25-12.739-3.522-18.45
+																																																																																				C496.337,265.142,512,245.669,512,222.609z"/>
 						</g>
 					</g>
 				</svg>
-				<div class="count">{{ dislike|length }}</div>
+				<div class="count" style="font-size: 20px;">{{ dislikes|length }}</div>
 			</div>
 		</div>
 		<div style="font-size: 20px;">
@@ -73,4 +80,56 @@
 		</div>
 		<p class="text-secondary mt-3" style="font-size:20px;">{{ post.createdAt|date('i:H d-M-Y') }}</p>
 	</div>
+{% endblock %}
+
+{% block scripts %}
+	 <script>
+							const like = document.querySelector('.like')
+							const dislike = document.querySelector('.dislike')
+							like.addEventListener('click', function () {
+									fetch('/posts/{{ post.slug }}/like', {
+										method: 'POST',
+										headers : {
+										}
+									})
+					  					.then((response) => {
+					  					  return response.json();
+					  					})
+										.then((response) => {
+											if(response.status === 'success')
+											{
+												like.children[1].innerText = Number(like.children[1].innerText) + 1;
+												like.children[0].classList.add('active');
+												dislike.children[0].classList.remove('active');
+											} else{
+												like.children[0].classList.remove('active');
+											}
+										})
+								}
+							)
+							dislike.addEventListener('click', function () {
+								if(dislike.children[0].classList.contains('active'))
+								{
+									fetch('/posts/{{ post.slug }}/dislike', {
+										method: 'POST',
+										headers : {
+											'Content-Type': 'application/json'
+										}
+									})
+						  					.then((response) => {
+					  					  return response.json();
+					  					})
+										.then((response) => {
+											if(response.status === 'success')
+											{
+												dislike.children[1].innerText = Number(dislike.children[1].innerText) + 1;
+												dislike.children[0].classList.add('active');
+												like.children[0].classList.remove('active');
+											} else{
+												dislike.children[0].classList.remove('active');
+											}
+										})
+								}
+							})
+						</script>
 {% endblock %}
